@@ -13,7 +13,7 @@ export default function Home() {
             Where Elegance Meets Style
           </p>
           <p className="text-lg mb-8 text-blue-100">
-            Discover the latest trends in men's, women's, and kids' fashion
+            Discover the latest trends in men&apos;s, women&apos;s, and kids&apos; fashion
           </p>
           <div className="flex flex-col sm:flex-row gap-4 justify-center">
             <button className="bg-white text-blue-600 px-8 py-3 rounded-lg font-semibold hover:bg-gray-100 transition-colors">
@@ -48,10 +48,10 @@ export default function Home() {
                 />
               </div>
               <div className="p-6">
-                <h3 className="text-xl font-semibold mb-2 text-gray-800">Men's Fashion</h3>
+                <h3 className="text-xl font-semibold mb-2 text-gray-800">Men&apos;s Fashion</h3>
                 <p className="text-gray-600 mb-4">Discover sophisticated clothing for men</p>
                 <button className="w-full bg-blue-600 text-white py-2 rounded-lg hover:bg-blue-700 transition-colors">
-                  Shop Men's wear
+                  Shop Men&apos;s wear
                 </button>
               </div>
             </div>
@@ -71,10 +71,10 @@ export default function Home() {
                 />
               </div>
               <div className="p-6">
-                <h3 className="text-xl font-semibold mb-2 text-gray-800">Women's Fashion</h3>
+                <h3 className="text-xl font-semibold mb-2 text-gray-800">Women&apos;s Fashion</h3>
                 <p className="text-gray-600 mb-4">Explore elegant styles for women</p>
                 <button className="w-full bg-pink-600 text-white py-2 rounded-lg hover:bg-pink-700 transition-colors">
-                  Shop Women's wear
+                  Shop Women&apos;s wear
                 </button>
               </div>
             </div>
@@ -87,17 +87,17 @@ export default function Home() {
                 </div>
                 <Image
                   src="/images/kids-fashion.jpg"
-                  alt="Kids' Fashion"
+                  alt="Kids&apos; Fashion"
                   fill
                   className="object-cover"
                   priority
                 />
               </div>
               <div className="p-6">
-                <h3 className="text-xl font-semibold mb-2 text-gray-800">Kids' Fashion</h3>
+                <h3 className="text-xl font-semibold mb-2 text-gray-800">Kids&apos; Fashion</h3>
                 <p className="text-gray-600 mb-4">Charming clothing for children</p>
                 <button className="w-full bg-green-600 text-white py-2 rounded-lg hover:bg-green-700 transition-colors">
-                  Shop Kids' wear
+                  Shop Kids&apos; wear
                 </button>
               </div>
             </div>
@@ -123,13 +123,7 @@ export default function Home() {
               <div className="relative h-64 overflow-hidden">
                 <div className="absolute inset-0 bg-gray-200 flex items-center justify-center">
                   <span className="text-gray-500 text-sm">Product Image</span>
-                  <Image
-                  src="/images/t-shirt.jpg"
-                  alt="Kids' Fashion"
-                  fill
-                  className="object-cover"
-                  priority
-                />
+                  
                 </div>
                 <div className="absolute top-3 right-3 bg-red-500 text-white text-xs px-2 py-1 rounded-full font-medium animate-pulse">
                   NEW
@@ -144,7 +138,7 @@ export default function Home() {
                 <h3 className="font-semibold text-gray-800 mb-2 group-hover:text-blue-600 transition-colors">
                   Premium Cotton T-Shirt
                 </h3>
-                <p className="text-sm text-gray-600 mb-2">Men's Collection</p>
+                <p className="text-sm text-gray-600 mb-2">Men&apos;s Collection</p>
                 <div className="flex items-center justify-between">
                   <div className="flex items-center space-x-2">
                     <span className="text-lg font-bold text-gray-800">₹1,299</span>
@@ -164,13 +158,7 @@ export default function Home() {
               <div className="relative h-64 overflow-hidden">
                 <div className="absolute inset-0 bg-gray-200 flex items-center justify-center">
                   <span className="text-gray-500 text-sm">Product Image</span>
-                  <Image
-                  src="/images/summer-dress.jpg"
-                  alt="Kids' Fashion"
-                  fill
-                  className="object-cover"
-                  priority
-                />
+                 
                 </div>
                 <div className="absolute top-3 right-3 bg-red-500 text-white text-xs px-2 py-1 rounded-full font-medium animate-pulse">
                   NEW
@@ -185,7 +173,7 @@ export default function Home() {
                 <h3 className="font-semibold text-gray-800 mb-2 group-hover:text-pink-600 transition-colors">
                   Elegant Summer Dress
                 </h3>
-                <p className="text-sm text-gray-600 mb-2">Women's Collection</p>
+                <p className="text-sm text-gray-600 mb-2">Women&apos;s Collection</p>
                 <div className="flex items-center justify-between">
                   <div className="flex items-center space-x-2">
                     <span className="text-lg font-bold text-gray-800">₹2,499</span>
@@ -205,13 +193,7 @@ export default function Home() {
               <div className="relative h-64 overflow-hidden">
                 <div className="absolute inset-0 bg-gray-200 flex items-center justify-center">
                   <span className="text-gray-500 text-sm">Product Image</span>
-                  <Image
-                  src="/images/jumpsuit.jpg"
-                  alt="Kids' Fashion"
-                  fill
-                  className="object-cover"
-                  priority
-                />
+                  
                 </div>
                 <div className="absolute top-3 right-3 bg-red-500 text-white text-xs px-2 py-1 rounded-full font-medium animate-pulse">
                   NEW
@@ -226,7 +208,7 @@ export default function Home() {
                 <h3 className="font-semibold text-gray-800 mb-2 group-hover:text-green-600 transition-colors">
                   Cute Kids Jumpsuit
                 </h3>
-                <p className="text-sm text-gray-600 mb-2">Kids' Collection</p>
+                <p className="text-sm text-gray-600 mb-2">Kids&apos; Collection</p>
                 <div className="flex items-center justify-between">
                   <div className="flex items-center space-x-2">
                     <span className="text-lg font-bold text-gray-800">₹899</span>
@@ -246,13 +228,7 @@ export default function Home() {
               <div className="relative h-64 overflow-hidden">
                 <div className="absolute inset-0 bg-gray-200 flex items-center justify-center">
                   <span className="text-gray-500 text-sm">Product Image</span>
-                  <Image
-                  src="/images/handbag.jpg"
-                  alt="Kids' Fashion"
-                  fill
-                  className="object-cover"
-                  priority
-                />
+                  
                 </div>
                 <div className="absolute top-3 right-3 bg-red-500 text-white text-xs px-2 py-1 rounded-full font-medium animate-pulse">
                   NEW
