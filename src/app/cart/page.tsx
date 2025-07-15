@@ -15,38 +15,11 @@ interface CartItem {
 }
 
 export default function CartPage() {
-  const [cartItems, setCartItems] = useState<CartItem[]>([
-    {
-      id: 1,
-      name: "Classic White T-Shirt",
-      price: 1499,
-      originalPrice: 1999,
-      quantity: 2,
-      size: "M",
-      color: "White",
-      image: "/api/placeholder/100/120"
-    },
-    {
-      id: 2,
-      name: "Slim Fit Jeans",
-      price: 2999,
-      originalPrice: 2999,
-      quantity: 1,
-      size: "32",
-      color: "Blue",
-      image: "/api/placeholder/100/120"
-    },
-    {
-      id: 3,
-      name: "Casual Blazer",
-      price: 5999,
-      originalPrice: 7999,
-      quantity: 1,
-      size: "L",
-      color: "Navy",
-      image: "/api/placeholder/100/120"
-    }
-  ]);
+  // Start with an empty cart
+  const [cartItems, setCartItems] = useState<CartItem[]>([]);
+
+  // Example function to add an item (to be called from product pages in the future)
+  // const addToCart = (item: CartItem) => setCartItems(items => [...items, item]);
 
   const updateQuantity = (id: number, newQuantity: number) => {
     if (newQuantity < 1) return;
@@ -187,7 +160,7 @@ export default function CartPage() {
                   </div>
                 </div>
 
-                <button className="w-full bg-blue-600 text-white py-3 rounded-lg font-medium hover:bg-blue-700 transition-colors mb-4">
+                <button className="w-full bg-blue-600 text-white py-3 rounded-lg font-medium hover:bg-blue-700 transition-colors mb-4" disabled={cartItems.length === 0}>
                   Proceed to Checkout
                 </button>
                 

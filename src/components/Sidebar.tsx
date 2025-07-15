@@ -18,27 +18,15 @@ const categoryData: CategorySection[] = [
   {
     title: "Men's Fashion",
     categories: [
-      { name: "Shirts & T-Shirts", href: "/mens/shirts", count: 45 },
-      { name: "Pants & Jeans", href: "/mens/pants", count: 32 },
-      { name: "Jackets & Coats", href: "/mens/jackets", count: 28 },
-      { name: "Sweaters & Hoodies", href: "/mens/sweaters", count: 23 },
-      { name: "Suits & Formal", href: "/mens/suits", count: 15 },
-      { name: "Activewear", href: "/mens/activewear", count: 19 },
-      { name: "Underwear & Sleepwear", href: "/mens/underwear", count: 12 },
-      { name: "Accessories", href: "/mens/accessories", count: 31 },
+      { name: "T-Shirts", href: "/mens/tshirts", count: 45 },
+       { name: "Hoodies", href: "/mens/hoodies", count: 23 },
     ]
   },
   {
     title: "Women's Fashion",
     categories: [
-      { name: "Dresses", href: "/womens/dresses", count: 67 },
-      { name: "Tops & Blouses", href: "/womens/tops", count: 54 },
-      { name: "Pants & Jeans", href: "/womens/pants", count: 41 },
-      { name: "Skirts", href: "/womens/skirts", count: 29 },
-      { name: "Jackets & Coats", href: "/womens/jackets", count: 35 },
-      { name: "Sweaters & Cardigans", href: "/womens/sweaters", count: 38 },
-      { name: "Activewear", href: "/womens/activewear", count: 26 },
-      { name: "Accessories", href: "/womens/accessories", count: 43 },
+      { name: "T-Shirts", href: "/womens/tshirts", count: 67 },
+      { name: "Hoodies", href: "/womens/hoodies", count: 54 },
     ]
   },
   {
@@ -46,12 +34,7 @@ const categoryData: CategorySection[] = [
     categories: [
       { name: "Boys' Clothing", href: "/kids/boys", count: 34 },
       { name: "Girls' Clothing", href: "/kids/girls", count: 39 },
-      { name: "Baby Clothes", href: "/kids/baby", count: 28 },
-      { name: "School Uniforms", href: "/kids/uniforms", count: 16 },
       { name: "Party Wear", href: "/kids/party", count: 21 },
-      { name: "Activewear", href: "/kids/activewear", count: 18 },
-      { name: "Shoes & Footwear", href: "/kids/shoes", count: 25 },
-      { name: "Accessories", href: "/kids/accessories", count: 19 },
     ]
   }
 ];

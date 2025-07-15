@@ -1,6 +1,11 @@
 import Image from 'next/image';
+import { products } from '@/data/products';
+import ProductCard from '@/components/ProductCard';
 
 export default function Home() {
+  // Filter new release products
+  const newReleases = products.filter((p) => p.isNew);
+
   return (
     <div className="min-h-screen bg-gray-50">
       {/* Hero Section */}
@@ -26,6 +31,30 @@ export default function Home() {
         </div>
       </section>
 
+      {/* New Releases Section */}
+      <section className="py-16 bg-white">
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+          <div className="text-center mb-12">
+            <h2 className="text-3xl font-bold text-gray-800 mb-4">
+              New Releases
+            </h2>
+            <p className="text-lg text-gray-600">
+              Discover the latest arrivals and trending styles
+            </p>
+          </div>
+          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
+            {newReleases.map((product) => (
+              <ProductCard key={product.id} product={product} />
+            ))}
+          </div>
+          <div className="text-center mt-8">
+            <button className="bg-gradient-to-r from-blue-600 to-purple-600 text-white px-8 py-3 rounded-lg font-semibold hover:from-blue-700 hover:to-purple-700 transition-all duration-300 transform hover:scale-105">
+              View All New Arrivals
+            </button>
+          </div>
+        </div>
+      </section>
+
       {/* Categories Section */}
       <section className="py-16">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
@@ -41,7 +70,7 @@ export default function Home() {
                 </div>
                 <Image
                   src="/images/mens-fashion.jpg"
-                  alt="Men's Fashion"
+                  alt="Men&apos;s Fashion"
                   fill
                   className="object-cover"
                   priority
@@ -64,7 +93,7 @@ export default function Home() {
                 </div>
                 <Image
                   src="/images/womens-fashion.jpg"
-                  alt="Women's Fashion"
+                  alt="Women&apos;s Fashion"
                   fill
                   className="object-cover"
                   priority
@@ -101,168 +130,6 @@ export default function Home() {
                 </button>
               </div>
             </div>
-          </div>
-        </div>
-      </section>
-
-      {/* New Releases Section */}
-      <section className="py-16 bg-white">
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-          <div className="text-center mb-12">
-            <h2 className="text-3xl font-bold text-gray-800 mb-4">
-              New Releases
-            </h2>
-            <p className="text-lg text-gray-600">
-              Discover the latest arrivals and trending styles
-            </p>
-          </div>
-          
-          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
-            {/* Product 1 */}
-            <div className="group bg-white rounded-lg shadow-md overflow-hidden hover:shadow-xl transition-all duration-300 transform hover:-translate-y-2">
-              <div className="relative h-64 overflow-hidden">
-                <div className="absolute inset-0 bg-gray-200 flex items-center justify-center">
-                  <span className="text-gray-500 text-sm">Product Image</span>
-                  
-                </div>
-                <div className="absolute top-3 right-3 bg-red-500 text-white text-xs px-2 py-1 rounded-full font-medium animate-pulse">
-                  NEW
-                </div>
-                <div className="absolute inset-0 bg-black bg-opacity-0 group-hover:bg-opacity-20 transition-all duration-300 flex items-center justify-center">
-                  <button className="bg-white text-gray-800 px-4 py-2 rounded-lg font-medium opacity-0 group-hover:opacity-100 transform translate-y-4 group-hover:translate-y-0 transition-all duration-300">
-                    Quick View
-                  </button>
-                </div>
-              </div>
-              <div className="p-4">
-                <h3 className="font-semibold text-gray-800 mb-2 group-hover:text-blue-600 transition-colors">
-                  Premium Cotton T-Shirt
-                </h3>
-                <p className="text-sm text-gray-600 mb-2">Men&apos;s Collection</p>
-                <div className="flex items-center justify-between">
-                  <div className="flex items-center space-x-2">
-                    <span className="text-lg font-bold text-gray-800">₹1,299</span>
-                    <span className="text-sm text-gray-500 line-through">₹1,599</span>
-                  </div>
-                  <button className="bg-blue-600 text-white p-2 rounded-full hover:bg-blue-700 transition-colors transform hover:scale-110">
-                    <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M3 3h2l.4 2M7 13h10l4-8H5.4m0 0L7 13m0 0l-2.5 5M7 13l2.5 5m6-5v6a2 2 0 01-2 2H9a2 2 0 01-2-2v-6m8 0V9a2 2 0 00-2-2H9a2 2 0 00-2 2v4.01" />
-                    </svg>
-                  </button>
-                </div>
-              </div>
-            </div>
-
-            {/* Product 2 */}
-            <div className="group bg-white rounded-lg shadow-md overflow-hidden hover:shadow-xl transition-all duration-300 transform hover:-translate-y-2">
-              <div className="relative h-64 overflow-hidden">
-                <div className="absolute inset-0 bg-gray-200 flex items-center justify-center">
-                  <span className="text-gray-500 text-sm">Product Image</span>
-                 
-                </div>
-                <div className="absolute top-3 right-3 bg-red-500 text-white text-xs px-2 py-1 rounded-full font-medium animate-pulse">
-                  NEW
-                </div>
-                <div className="absolute inset-0 bg-black bg-opacity-0 group-hover:bg-opacity-20 transition-all duration-300 flex items-center justify-center">
-                  <button className="bg-white text-gray-800 px-4 py-2 rounded-lg font-medium opacity-0 group-hover:opacity-100 transform translate-y-4 group-hover:translate-y-0 transition-all duration-300">
-                    Quick View
-                  </button>
-                </div>
-              </div>
-              <div className="p-4">
-                <h3 className="font-semibold text-gray-800 mb-2 group-hover:text-pink-600 transition-colors">
-                  Elegant Summer Dress
-                </h3>
-                <p className="text-sm text-gray-600 mb-2">Women&apos;s Collection</p>
-                <div className="flex items-center justify-between">
-                  <div className="flex items-center space-x-2">
-                    <span className="text-lg font-bold text-gray-800">₹2,499</span>
-                    <span className="text-sm text-gray-500 line-through">₹2,999</span>
-                  </div>
-                  <button className="bg-pink-600 text-white p-2 rounded-full hover:bg-pink-700 transition-colors transform hover:scale-110">
-                    <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M3 3h2l.4 2M7 13h10l4-8H5.4m0 0L7 13m0 0l-2.5 5M7 13l2.5 5m6-5v6a2 2 0 01-2 2H9a2 2 0 01-2-2v-6m8 0V9a2 2 0 00-2-2H9a2 2 0 00-2 2v4.01" />
-                    </svg>
-                  </button>
-                </div>
-              </div>
-            </div>
-
-            {/* Product 3 */}
-            <div className="group bg-white rounded-lg shadow-md overflow-hidden hover:shadow-xl transition-all duration-300 transform hover:-translate-y-2">
-              <div className="relative h-64 overflow-hidden">
-                <div className="absolute inset-0 bg-gray-200 flex items-center justify-center">
-                  <span className="text-gray-500 text-sm">Product Image</span>
-                  
-                </div>
-                <div className="absolute top-3 right-3 bg-red-500 text-white text-xs px-2 py-1 rounded-full font-medium animate-pulse">
-                  NEW
-                </div>
-                <div className="absolute inset-0 bg-black bg-opacity-0 group-hover:bg-opacity-20 transition-all duration-300 flex items-center justify-center">
-                  <button className="bg-white text-gray-800 px-4 py-2 rounded-lg font-medium opacity-0 group-hover:opacity-100 transform translate-y-4 group-hover:translate-y-0 transition-all duration-300">
-                    Quick View
-                  </button>
-                </div>
-              </div>
-              <div className="p-4">
-                <h3 className="font-semibold text-gray-800 mb-2 group-hover:text-green-600 transition-colors">
-                  Cute Kids Jumpsuit
-                </h3>
-                <p className="text-sm text-gray-600 mb-2">Kids&apos; Collection</p>
-                <div className="flex items-center justify-between">
-                  <div className="flex items-center space-x-2">
-                    <span className="text-lg font-bold text-gray-800">₹899</span>
-                    <span className="text-sm text-gray-500 line-through">₹1,199</span>
-                  </div>
-                  <button className="bg-green-600 text-white p-2 rounded-full hover:bg-green-700 transition-colors transform hover:scale-110">
-                    <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M3 3h2l.4 2M7 13h10l4-8H5.4m0 0L7 13m0 0l-2.5 5M7 13l2.5 5m6-5v6a2 2 0 01-2 2H9a2 2 0 01-2-2v-6m8 0V9a2 2 0 00-2-2H9a2 2 0 00-2 2v4.01" />
-                    </svg>
-                  </button>
-                </div>
-              </div>
-            </div>
-
-            {/* Product 4 */}
-            <div className="group bg-white rounded-lg shadow-md overflow-hidden hover:shadow-xl transition-all duration-300 transform hover:-translate-y-2">
-              <div className="relative h-64 overflow-hidden">
-                <div className="absolute inset-0 bg-gray-200 flex items-center justify-center">
-                  <span className="text-gray-500 text-sm">Product Image</span>
-                  
-                </div>
-                <div className="absolute top-3 right-3 bg-red-500 text-white text-xs px-2 py-1 rounded-full font-medium animate-pulse">
-                  NEW
-                </div>
-                <div className="absolute inset-0 bg-black bg-opacity-0 group-hover:bg-opacity-20 transition-all duration-300 flex items-center justify-center">
-                  <button className="bg-white text-gray-800 px-4 py-2 rounded-lg font-medium opacity-0 group-hover:opacity-100 transform translate-y-4 group-hover:translate-y-0 transition-all duration-300">
-                    Quick View
-                  </button>
-                </div>
-              </div>
-              <div className="p-4">
-                <h3 className="font-semibold text-gray-800 mb-2 group-hover:text-purple-600 transition-colors">
-                  Designer Handbag
-                </h3>
-                <p className="text-sm text-gray-600 mb-2">Accessories</p>
-                <div className="flex items-center justify-between">
-                  <div className="flex items-center space-x-2">
-                    <span className="text-lg font-bold text-gray-800">₹3,999</span>
-                    <span className="text-sm text-gray-500 line-through">₹4,999</span>
-                  </div>
-                  <button className="bg-purple-600 text-white p-2 rounded-full hover:bg-purple-700 transition-colors transform hover:scale-110">
-                    <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M3 3h2l.4 2M7 13h10l4-8H5.4m0 0L7 13m0 0l-2.5 5M7 13l2.5 5m6-5v6a2 2 0 01-2 2H9a2 2 0 01-2-2v-6m8 0V9a2 2 0 00-2-2H9a2 2 0 00-2 2v4.01" />
-                    </svg>
-                  </button>
-                </div>
-              </div>
-            </div>
-          </div>
-
-          <div className="text-center mt-8">
-            <button className="bg-gradient-to-r from-blue-600 to-purple-600 text-white px-8 py-3 rounded-lg font-semibold hover:from-blue-700 hover:to-purple-700 transition-all duration-300 transform hover:scale-105">
-              View All New Arrivals
-            </button>
           </div>
         </div>
       </section>
