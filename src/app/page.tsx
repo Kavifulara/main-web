@@ -1,13 +1,33 @@
+'use client';
+import {  useState } from 'react';
 import Image from 'next/image';
-import { products } from '@/data/products';
+import { Product, products } from '@/data/products';
 import ProductCard from '@/components/ProductCard';
+import ProductSearch from '@/components/ProductSearch';
+
+
 
 export default function Home() {
   // Filter new release products
   const newReleases = products.filter((p) => p.isNew);
+   const [filteredProducts, setFilteredProducts] = useState(products);
+
+  const handleSearchResults = (results: Product[]) => {
+    setFilteredProducts(results);
+  };
 
   return (
+    <div className="lg:ml-72"> 
     <div className="min-h-screen bg-gray-50">
+      <main>
+        <div className="flex justify-center items-center h-16">
+          <ProductSearch 
+            products = {products}
+            onSearchResults={handleSearchResults} 
+          />
+        </div> 
+      </main>
+     
       {/* Hero Section */}
       <section className="bg-gradient-to-r from-blue-600 to-purple-600 text-white py-20">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
@@ -55,85 +75,7 @@ export default function Home() {
         </div>
       </section>
 
-      {/* Categories Section */}
-      <section className="py-16">
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-          <h2 className="text-3xl font-bold text-center mb-12 text-gray-800">
-            Shop by Category
-          </h2>
-          <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
-            {/* Men's Section */}
-            <div className="bg-white rounded-lg shadow-md overflow-hidden hover:shadow-lg transition-shadow">
-              <div className="relative h-64 bg-gradient-to-br from-blue-400 to-blue-600">
-                <div className="absolute inset-0 bg-black bg-opacity-30 flex items-center justify-center">
-                  <span className="text-white text-4xl font-bold z-10">MEN</span>
-                </div>
-                <Image
-                  src="/images/mens-fashion.jpg"
-                  alt="Men&apos;s Fashion"
-                  fill
-                  className="object-cover"
-                  priority
-                />
-              </div>
-              <div className="p-6">
-                <h3 className="text-xl font-semibold mb-2 text-gray-800">Men&apos;s Fashion</h3>
-                <p className="text-gray-600 mb-4">Discover sophisticated clothing for men</p>
-                <button className="w-full bg-blue-600 text-white py-2 rounded-lg hover:bg-blue-700 transition-colors">
-                  Shop Men&apos;s wear
-                </button>
-              </div>
-            </div>
-
-            {/* Women's Section */}
-            <div className="bg-white rounded-lg shadow-md overflow-hidden hover:shadow-lg transition-shadow">
-              <div className="relative h-64 bg-gradient-to-br from-pink-400 to-pink-600">
-                <div className="absolute inset-0 bg-black bg-opacity-30 flex items-center justify-center">
-                  <span className="text-white text-4xl font-bold z-10">WOMEN</span>
-                </div>
-                <Image
-                  src="/images/womens-fashion.jpg"
-                  alt="Women&apos;s Fashion"
-                  fill
-                  className="object-cover"
-                  priority
-                />
-              </div>
-              <div className="p-6">
-                <h3 className="text-xl font-semibold mb-2 text-gray-800">Women&apos;s Fashion</h3>
-                <p className="text-gray-600 mb-4">Explore elegant styles for women</p>
-                <button className="w-full bg-pink-600 text-white py-2 rounded-lg hover:bg-pink-700 transition-colors">
-                  Shop Women&apos;s wear
-                </button>
-              </div>
-            </div>
-
-            {/* Kids' Section */}
-            <div className="bg-white rounded-lg shadow-md overflow-hidden hover:shadow-lg transition-shadow">
-              <div className="relative h-64 bg-gradient-to-br from-green-400 to-green-600">
-                <div className="absolute inset-0 bg-black bg-opacity-30 flex items-center justify-center">
-                  <span className="text-white text-4xl font-bold z-10">KIDS</span>
-                </div>
-                <Image
-                  src="/images/kids-fashion.jpg"
-                  alt="Kids&apos; Fashion"
-                  fill
-                  className="object-cover"
-                  priority
-                />
-              </div>
-              <div className="p-6">
-                <h3 className="text-xl font-semibold mb-2 text-gray-800">Kids&apos; Fashion</h3>
-                <p className="text-gray-600 mb-4">Charming clothing for children</p>
-                <button className="w-full bg-green-600 text-white py-2 rounded-lg hover:bg-green-700 transition-colors">
-                  Shop Kids&apos; wear
-                </button>
-              </div>
-            </div>
-          </div>
-        </div>
-      </section>
-
+      
       {/* Features Section */}
       <section className="bg-white py-16">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
@@ -171,6 +113,7 @@ export default function Home() {
           </div>
         </div>
       </section>
+    </div>
     </div>
   );
 }

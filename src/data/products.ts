@@ -29,7 +29,7 @@ export const products: Product[] = [
     price: 1999,
     sizes: ['M', 'L', 'XL'],
     category: 'mens-hoodies',
-    isNew: false,
+    isNew: true,
     description: 'Warm and stylish hoodie for men.'
   },
   {
@@ -50,7 +50,7 @@ export const products: Product[] = [
     price: 2099,
     sizes: ['S', 'M', 'L', 'XL'],
     category: 'womens-hoodies',
-    isNew: false,
+    isNew: true,
     description: 'Cozy and fashionable hoodie for women.'
   },
   {
@@ -70,7 +70,7 @@ export const products: Product[] = [
     price: 1199,
     sizes: ['XS', 'S', 'M', 'L'],
     category: 'kids-girls',
-    isNew: false,
+    isNew: true,
     description: 'Beautiful dress for girls.'
   },
   {

@@ -1,0 +1,170 @@
+.searchContainer {
+  position: relative;
+  width: 100%;
+  max-width: 600px;
+  margin: 0 auto;
+}
+
+.searchWrapper {
+  display: flex;
+  align-items: center;
+  background-color: white;
+  border: 2px solid #ddd;
+  border-radius: 4px;
+  overflow: hidden;
+  transition: border-color 0.2s ease;
+}
+
+.searchWrapper:focus-within {
+  border-color: #ff9900;
+  box-shadow: 0 0 0 1px #ff9900;
+}
+
+.categoryDropdown {
+  background-color: #f0f0f0;
+  border: none;
+  padding: 12px 16px;
+  font-size: 14px;
+  color: #333;
+  cursor: pointer;
+  white-space: nowrap;
+  border-right: 1px solid #ddd;
+  outline: none;
+}
+
+.categoryDropdown:hover {
+  background-color: #e6e6e6;
+}
+
+.searchInput {
+  flex: 1;
+  border: none;
+  padding: 12px 16px;
+  font-size: 16px;
+  outline: none;
+  background: transparent;
+}
+
+.searchInput::placeholder {
+  color: #999;
+}
+
+.searchButton {
+  background-color: #ff9900;
+  border: none;
+  padding: 12px 16px;
+  cursor: pointer;
+  transition: background-color 0.2s ease;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.searchButton:hover {
+  background-color: #e68900;
+}
+
+.searchIcon {
+  width: 20px;
+  height: 20px;
+  fill: white;
+}
+
+.suggestionsDropdown {
+  position: absolute;
+  top: 100%;
+  left: 0;
+  right: 0;
+  background: white;
+  border: 1px solid #ddd;
+  border-top: none;
+  border-radius: 0 0 4px 4px;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+  z-index: 1000;
+  max-height: 300px;
+  overflow-y: auto;
+}
+
+.suggestionItem {
+  padding: 12px 16px;
+  cursor: pointer;
+  border-bottom: 1px solid #f0f0f0;
+  display: flex;
+  align-items: center;
+  font-size: 14px;
+  color: #333;
+  transition: background-color 0.15s ease;
+}
+
+.suggestionItem:last-child {
+  border-bottom: none;
+}
+
+.suggestionItem:hover {
+  background-color: #f8f8f8;
+}
+
+.suggestionIcon {
+  width: 16px;
+  height: 16px;
+  margin-right: 12px;
+  opacity: 0.6;
+}
+
+.suggestionText {
+  flex: 1;
+}
+
+/* Responsive design */
+@media (max-width: 768px) {
+  .searchContainer {
+    max-width: 100%;
+  }
+  
+  .categoryDropdown {
+    padding: 10px 12px;
+    font-size: 13px;
+  }
+  
+  .searchInput {
+    padding: 10px 12px;
+    font-size: 16px; /* Prevent zoom on iOS */
+  }
+  
+  .searchButton {
+    padding: 10px 12px;
+  }
+  
+  .searchIcon {
+    width: 18px;
+    height: 18px;
+  }
+  
+  .suggestionItem {
+    padding: 10px 12px;
+    font-size: 13px;
+  }
+}
+
+/* Focus states for accessibility */
+.categoryDropdown:focus,
+.searchButton:focus {
+  outline: 2px solid #ff9900;
+  outline-offset: 1px;
+}
+
+/* Animation for suggestions dropdown */
+.suggestionsDropdown {
+  animation: slideDown 0.2s ease-out;
+}
+
+@keyframes slideDown {
+  from {
+    opacity: 0;
+    transform: translateY(-10px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
