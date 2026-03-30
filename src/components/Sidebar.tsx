@@ -43,7 +43,7 @@ export default function Sidebar() {
   const [activeSection, setActiveSection] = useState<string>("Men's Fashion");
 
   return (
-    <div className="w-64 bg-white shadow-lg h-screen fixed left-0 top-16 overflow-y-auto">
+    <div className="w-64 fixed left-0 top-16 h-screen bg-white shadow-lg overflow-y-auto">
       <div className="p-4">
         <h2 className="text-lg font-semibold text-gray-800 mb-4">Categories</h2>
         
