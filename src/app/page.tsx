@@ -14,7 +14,7 @@ export default function Home() {
 
   const handleSearchResults = (results: Product[]) => {
     setFilteredProducts(results);
-  };
+  }
 
   // Hero carousel images
   const heroSlides = [
