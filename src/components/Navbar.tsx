@@ -1,13 +1,36 @@
 'use client';
 
-import { useState } from 'react';
+
 import Link from 'next/link';
 import Logo from './Logo';
 import Sidebar from './Sidebar';
+import { useEffect, useState } from "react";
+import app from "@/lib/firebase";
+import { auth } from "@/lib/firebase";
+import { getAuth, onAuthStateChanged, signOut } from "firebase/auth";
+import { User } from "firebase/auth";
 
 export default function Navbar() {
   const [sidebarOpen, setSidebarOpen] = useState(false);
   const handleSidebarClose = () => setSidebarOpen(false);
+  const [open, setOpen] = useState(false);
+  
+  const handleLogout = () => {
+    const auth = getAuth(app);
+    signOut(auth);
+    setOpen(false);
+  };
+  const [user, setUser] = useState<User | null>(null);
+
+  useEffect(() => {
+    const auth = getAuth();
+
+    const unsubscribe = onAuthStateChanged(auth, (user) => {
+      setUser(user);
+    });
+
+    return () => unsubscribe(); // cleanup
+  }, []);
 
   return (
     <>
@@ -70,6 +93,8 @@ export default function Navbar() {
               <Logo />
             </div>
 
+            
+
             {/* Right side - Cart and Sign In */}
             <div className="flex items-center space-x-4">
               {/* Cart Icon */}
@@ -93,12 +118,42 @@ export default function Navbar() {
               </Link>
 
               {/* Sign In Button */}
-              <Link
-                href="/signin"
-                className="bg-blue-600 text-white px-4 py-2 rounded-lg text-sm font-medium hover:bg-blue-700 transition-colors"
-              >
-                Sign In
-              </Link>
+              {!user && (
+                <Link
+                  href="/signin"
+                  className="bg-blue-600 text-white px-4 py-2 rounded-lg text-sm font-medium hover:bg-blue-700 transition-colors"
+                >
+                  Sign In
+                </Link>
+              )}
+
+              {user ? (
+              <div className="relative cursor-pointer text-black">
+                <button onClick={() => setOpen(!open)}>
+                  Hi, {user.displayName || user.email?.split("@")[0]}
+                </button>
+
+                {open && (
+                
+
+                  <div className="absolute right-0 mt-2 w-40 bg-white shadow-lg rounded-lg border">
+                    <p className="p-2 hover:bg-gray-100 cursor-pointer text-black">Profile</p>
+                    <p className="p-2 hover:bg-gray-100 cursor-pointer text-black">Address</p>
+                    <p className="p-2 hover:bg-gray-100 cursor-pointer text-black">Your Orders</p>
+                    <p
+                      className="p-2 hover:bg-gray-100 cursor-pointer text-red-500"
+                      onClick={handleLogout}
+                    >
+                      Logout
+                    </p>
+                  </div>
+                
+                
+                )}
+              </div>
+            ) : (
+              <button>Sign In</button>
+            )}
             </div>
           </div>
         </div>
