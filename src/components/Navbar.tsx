@@ -1,5 +1,4 @@
-'use client';
-
+"use client";
 
 import Link from 'next/link';
 import Logo from './Logo';
@@ -9,27 +8,75 @@ import app from "@/lib/firebase";
 import { auth } from "@/lib/firebase";
 import { getAuth, onAuthStateChanged, signOut } from "firebase/auth";
 import { User } from "firebase/auth";
+import { useRouter } from "next/navigation";
+import { useCart } from "@/context/CartContext";
+import { Product, products } from '@/data/products';
+import ProductSearch from '@/components/ProductSearch';
+import { useWishlist } from "@/context/WishlistContext";
+import { Heart } from "lucide-react";
+import { useRef } from "react";
 
-export default function Navbar() {
+type Props = {
+  products: Product[];
+};
+
+export default function Navbar({ showSidebar }: { showSidebar: boolean }) {
   const [sidebarOpen, setSidebarOpen] = useState(false);
   const handleSidebarClose = () => setSidebarOpen(false);
   const [open, setOpen] = useState(false);
+  const [filteredProducts, setFilteredProducts] = useState<Product[]>(products);
+  const handleSearchResults = (results: Product[]) => {
+      setFilteredProducts(results);
+    }
+
+  const router = useRouter();
+
+  const { cartItems } = useCart();
+  const totalItems = cartItems.reduce(
+    (acc, item) => acc + item.quantity,
+    0
+  );
+
+  const { wishlist } = useWishlist();
+
   
-  const handleLogout = () => {
+  
+  const handleLogout = async() => {
     const auth = getAuth(app);
-    signOut(auth);
+    await signOut(auth);
+    localStorage.removeItem("isLoggedIn");
     setOpen(false);
+    router.push("/");
   };
   const [user, setUser] = useState<User | null>(null);
 
   useEffect(() => {
-    const auth = getAuth();
-
+    if (typeof window !== "undefined") {
+      const auth = getAuth();
+    }
     const unsubscribe = onAuthStateChanged(auth, (user) => {
       setUser(user);
     });
 
     return () => unsubscribe(); // cleanup
+  }, []);
+
+  const dropdownRef = useRef<HTMLDivElement>(null);
+  useEffect(() => {
+    const handleClickOutside = (event: MouseEvent) => {
+      if (
+        dropdownRef.current &&
+        !dropdownRef.current.contains(event.target as Node)
+      ) {
+        setOpen(false); // 👈 close dropdown
+      }
+    };
+  
+    document.addEventListener("mousedown", handleClickOutside);
+  
+    return () => {
+      document.removeEventListener("mousedown", handleClickOutside);
+    };
   }, []);
 
   return (
@@ -43,7 +90,7 @@ export default function Navbar() {
             onClick={handleSidebarClose}
           />
           {/* Mobile Drawer - only visible on mobile */}
-          <aside className="fixed top-0 left-0 h-full w-72 bg-white shadow-lg z-50 transition-transform duration-300 flex flex-col lg:hidden">
+          <aside className="fixed top-0 left-0 h-full w-72 bg-white dark:bg-darkCard shadow-lg z-50 transition-transform duration-300 flex flex-col lg:hidden">
             <div className="flex items-center justify-between p-4 border-b">
               <span className="text-lg font-bold">Categories</span>
               <button
@@ -61,19 +108,11 @@ export default function Navbar() {
         </>
       )}
 
-      {/* Desktop Sidebar - Always visible on desktop */}
-      <aside className="hidden lg:flex fixed top-0 left-0 h-full w-72 bg-white shadow-lg z-40 flex-col">
-        <div className="flex items-center justify-center p-4 border-b">
-          <span className="text-lg font-bold">Categories</span>
-        </div>
-        <div className="flex-1 overflow-y-auto">
-          <Sidebar />
-        </div>
-      </aside>
-
-      <nav className="bg-white/95 backdrop-blur-md shadow-lg border-b border-gray-100 sticky top-0 z-30">
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 lg:ml-72">
-          <div className="flex justify-between items-center h-16">
+      <nav className="relative bg-[rgba(20,20,20,0.65)] backdrop-blur-xl text-gray-200 border-b border-white/10 shadow-[0_8px_30px_rgba(0,0,0,0.4)]  border-b sticky top-0 z-10">
+        
+        <div className="absolute inset-0 bg-gradient-to-b from-white/10 via-transparent to-transparent pointer-events-none" />
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+          <div className={`flex items-center h-16 gap-6 w-full ${showSidebar ? "" : "justify-between" }`}>
             {/* Hamburger Menu - Only visible on mobile */}
             <button
               className="mr-2 flex items-center justify-center w-10 h-10 rounded-md hover:bg-gray-100 focus:outline-none focus:ring-2 focus:ring-blue-500 lg:hidden"
@@ -88,60 +127,100 @@ export default function Navbar() {
               </svg>
             </button>
 
-            {/* Logo */}
-            <div className="flex-shrink-0">
+            {/* Left side - Logo */}
+            <div className={`${showSidebar ? "" : "flex-1"}`}>
               <Logo />
             </div>
 
+            {/* Center - Search Bar */}
             
+              <div className={`${showSidebar ? "" : "flex-1 flex justify-center"}`}>
+                <ProductSearch 
+                  products={products}
+                  filteredProducts={filteredProducts} 
+                  setFiltered={handleSearchResults} 
+                />
+              </div>
 
-            {/* Right side - Cart and Sign In */}
-            <div className="flex items-center space-x-4">
+            <div className="flex items-center space-x-6 ml-auto">
+
+              {/* Wishlist Icon */}
+              <Link href="/wishlist" className="relative">
+                <Heart className="w-6 h-6 text-white transition-transform duration-200 hover:scale-110" />
+
+              
+                {wishlist.length > 0 && (
+                  <span className="absolute -top-2 -right-2 bg-red-500 text-white text-xs px-2 rounded-full">
+                    {wishlist.length}
+                  </span>
+                )}
+              </Link>
+
               {/* Cart Icon */}
-              <Link href="/cart" className="relative p-2 text-gray-600 hover:text-gray-900 transition-colors">
-                <svg
-                  className="h-6 w-6"
-                  fill="none"
-                  stroke="currentColor"
-                  viewBox="0 0 24 24"
-                >
-                  <path
-                    strokeLinecap="round"
-                    strokeLinejoin="round"
-                    strokeWidth={2}
-                    d="M3 3h2l.4 2M7 13h10l4-8H5.4m0 0L7 13m0 0l-2.5 5M7 13l2.5 5m6-5v6a2 2 0 01-2 2H9a2 2 0 01-2-2v-6m8 0V9a2 2 0 00-2-2H9a2 2 0 00-2 2v4.01"
-                  />
-                </svg>
-                <span className="absolute -top-1 -right-1 bg-red-500 text-white text-xs rounded-full h-5 w-5 flex items-center justify-center">
-                  0
-                </span>
+              <Link href="/cart" id="cart-icon" className="relative">
+                <span className="text-2xl">🛒</span>
+                {totalItems > 0 && (
+                  <span className="absolute -top-2 -right-2 bg-white/10 border border-white/20 backdrop-blur-md hover:bg-white/20 text-xs font-semibold px-2 py-0.5 rounded-full text-white ">
+                    {totalItems}
+                  </span>
+                )}
               </Link>
 
               {/* Sign In Button */}
               {!user && (
                 <Link
                   href="/signin"
-                  className="bg-blue-600 text-white px-4 py-2 rounded-lg text-sm font-medium hover:bg-blue-700 transition-colors"
+                  className=" px-4 py-2 rounded-lg 
+                              bg-yellow-400/10 border border-yellow-400/30 
+                              text-yellow-300 backdrop-blur-md
+                              hover:bg-yellow-400/20 
+                              hover:shadow-[0_0_20px_rgba(255,215,0,0.4)]
+                              transition-all duration-300 "
                 >
                   Sign In
                 </Link>
               )}
 
               {user ? (
-              <div className="relative cursor-pointer text-black">
+              <div className="relative cursor-pointer text-white">
                 <button onClick={() => setOpen(!open)}>
-                  Hi, {user.displayName || user.email?.split("@")[0]}
+                  Hi, {user.displayName || user.email?.split("@")[0] } 👋
                 </button>
 
                 {open && (
                 
 
-                  <div className="absolute right-0 mt-2 w-40 bg-white shadow-lg rounded-lg border">
-                    <p className="p-2 hover:bg-gray-100 cursor-pointer text-black">Profile</p>
-                    <p className="p-2 hover:bg-gray-100 cursor-pointer text-black">Address</p>
-                    <p className="p-2 hover:bg-gray-100 cursor-pointer text-black">Your Orders</p>
+                  <div 
+                    ref={dropdownRef}
+                    className="absolute right-0 mt-2 w-44 bg-black/80 backdrop-blur-lg border border-white/50 rounded-xl shadow-xl p-2 z-50 border">
+                    
+                    <p className="p-2 hover:bg-gray-300 cursor-pointer text-white hover:rounded-full rounded-full hover:text-black transition-all duration-200">
+                      <button
+                        onClick={() => {
+                          router.push("/profile");
+                          setOpen(false);
+                        }}
+                        className="w-full text-left"
+                      >
+                        Profile
+                      </button>
+                    </p>
+                    <p className="p-2 hover:bg-gray-300 cursor-pointer text-white hover:rounded-full rounded-full hover:text-black transition-all duration-200">
+                      <button
+                        onClick={() => {
+                          router.push("/address");
+                          setOpen(false);
+                        }}
+                        className="w-full text-left"
+                      >
+                        Address
+                      </button>
+                    </p>
+                    <p className="p-2 hover:bg-gray-300 cursor-pointer text-white hover:rounded-full rounded-full hover:text-black transition-all duration-200">
+                      Your Orders
+                    </p>
                     <p
-                      className="p-2 hover:bg-gray-100 cursor-pointer text-red-500"
+                      className="p-2 hover:bg-gray-200 cursor-pointer text-red-300 hover:rounded-full rounded-full hover:text-red-500 transition-all duration-200"
                       onClick={handleLogout}
                     >
                       Logout
@@ -151,9 +230,7 @@ export default function Navbar() {
                 
                 )}
               </div>
-            ) : (
-              <button>Sign In</button>
-            )}
+              ) : null}
             </div>
           </div>
         </div>

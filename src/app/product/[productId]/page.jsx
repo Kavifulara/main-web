@@ -1,21 +1,31 @@
-'use client';
+// handles how a product page will be shown when the actual product page is visited
+
+"use client";
 
 import { useState, useEffect } from 'react';
 import { useParams } from 'next/navigation';
 import Image from 'next/image';
 import Link from 'next/link';
-import { products } from '@/data/products';
+import { Product , products } from '@/data/products';
+import { useCart } from "@/context/CartContext";
+import { useWishlist } from "@/context/WishlistContext";
 
 export default function ProductPage() {
   const params = useParams();
   const productId = params.productId;
+
+  const { addToCart } = useCart();
+  const { addToWishlist, removeFromWishlist, isWishlisted } = useWishlist();
+ 
+  
+
+  const [added, setAdded] = useState(false);
   
   const [product, setProduct] = useState(null);
   const [selectedSize, setSelectedSize] = useState('');
   const [selectedColor, setSelectedColor] = useState('Black');
   const [quantity, setQuantity] = useState(1);
   const [activeImageIndex, setActiveImageIndex] = useState(0);
-  const [isWishlisted, setIsWishlisted] = useState(false);
   const [showSizeGuide, setShowSizeGuide] = useState(false);
 
   useEffect(() => {
@@ -28,7 +38,7 @@ export default function ProductPage() {
         reviews: Math.floor(Math.random() * 2000) + 500,
         images: [
           foundProduct.image,
-          foundProduct.image, // In a real app, you'd have multiple images
+          foundProduct.image, // In a real app, we'd have multiple images
           foundProduct.image,
         ],
         colors: ['Black', 'White', 'Navy', 'Grey', 'Red'],
@@ -78,8 +88,47 @@ export default function ProductPage() {
     );
   }
 
+  const flyToCart = (imgSrc, event) => {
+    const cart = document.getElementById("cart-icon");
+    if (!cart) return;
+
+    const img = document.createElement("img");
+    img.src = imgSrc;
+
+    const rect = event.currentTarget.getBoundingClientRect();
+
+    img.style.position = "fixed";
+    img.style.left = rect.left + "px";
+    img.style.top = rect.top + "px";
+    img.style.width = "80px";
+    img.style.height = "80px";
+    img.style.borderRadius = "12px";
+    img.style.zIndex = "9999";
+    img.style.transition = "all 0.8s ease-in-out";
+
+    document.body.appendChild(img);
+
+    const cartRect = cart.getBoundingClientRect();
+  
+    setTimeout(() => {
+      img.style.left = cartRect.left + "px";
+      img.style.top = cartRect.top + "px";
+      img.style.width = "20px";
+      img.style.height = "20px";
+      img.style.opacity = "0.5";
+    }, 10);
+  
+    setTimeout(() => {
+      img.remove();
+    }, 800);
+  };
+
+  const wishlisted = isWishlisted(product.id);
+
+  
+
   return (
-    <div className="min-h-screen bg-gradient-to-br from-gray-50 via-white to-blue-50 lg:ml-72">
+    <div className="min-h-screen bg-gradient-to-br from-[#0a0a0a] via-[#111111] to-[#050505] text-white">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
         {/* Breadcrumb */}
         <nav className="flex mb-8 text-sm">
@@ -88,14 +137,14 @@ export default function ProductPage() {
           <Link href={`/${product.category.split('-')[0]}`} className="text-blue-600 hover:text-blue-800 capitalize">
             {product.category.split('-')[0]}
           </Link>
-          <span className="mx-2 text-gray-500">/</span>
-          <span className="text-gray-500">{product.name}</span>
+          <span className="mx-2 text-gray-200">/</span>
+          <span className="text-gray-200">{product.name}</span>
         </nav>
 
         <div className="grid grid-cols-1 lg:grid-cols-2 gap-12 mb-16">
           {/* Image Gallery Section */}
           <div className="space-y-4">
-            <div className="relative aspect-square overflow-hidden rounded-2xl shadow-2xl bg-white">
+            <div className="relative aspect-square overflow-hidden rounded-2xl shadow-2xl bg-white dark:bg-black">
               <Image 
                 src={product.images[activeImageIndex]} 
                 alt={product.name}
@@ -136,7 +185,7 @@ export default function ProductPage() {
           {/* Product Info Section */}
           <div className="space-y-6">
             <div>
-              <h1 className="text-4xl font-bold text-gray-900 mb-4">{product.name}</h1>
+              <h1 className="text-4xl font-bold text-white mb-4">{product.name}</h1>
               
               {/* Rating Section */}
               <div className="flex items-center gap-4 mb-6">
@@ -148,7 +197,7 @@ export default function ProductPage() {
                       </svg>
                     ))}
                   </div>
-                  <span className="ml-2 text-gray-600">({product.rating})</span>
+                  <span className="ml-2 text-gray-400">({product.rating})</span>
                 </div>
                 <span className="text-blue-600 hover:text-blue-800 cursor-pointer">
                   {product.reviews} reviews
@@ -157,10 +206,10 @@ export default function ProductPage() {
 
               {/* Price Section */}
               <div className="flex items-center gap-4 mb-6">
-                <span className="text-4xl font-bold text-gray-900">₹{product.price.toLocaleString()}</span>
+                <span className="text-4xl font-bold text-gray-200">₹{product.price.toLocaleString()}</span>
                 {product.oldPrice && (
                   <>
-                    <span className="text-xl text-gray-500 line-through">₹{product.oldPrice.toLocaleString()}</span>
+                    <span className="text-xl text-gray-300 line-through">₹{product.oldPrice.toLocaleString()}</span>
                     <span className="bg-green-100 text-green-800 px-3 py-1 rounded-full text-sm font-medium">
                       Save ₹{(product.oldPrice - product.price).toLocaleString()}
                     </span>
@@ -168,12 +217,12 @@ export default function ProductPage() {
                 )}
               </div>
 
-              <p className="text-lg text-gray-600 leading-relaxed mb-8">{product.description}</p>
+              <p className="text-lg text-gray-400 leading-relaxed mb-8">{product.description}</p>
             </div>
 
             {/* Color Selection */}
             <div>
-              <h3 className="text-lg font-semibold mb-3">Color: <span className="font-normal text-gray-600">{selectedColor}</span></h3>
+              <h3 className="text-lg font-semibold mb-3">Color: <span className="font-normal text-gray-300">{selectedColor}</span></h3>
               <div className="flex gap-3">
                 {product.colors.map(color => (
                   <button 
@@ -200,7 +249,7 @@ export default function ProductPage() {
             {/* Size Selection */}
             <div>
               <div className="flex items-center justify-between mb-3">
-                <h3 className="text-lg font-semibold">Size: <span className="font-normal text-gray-600">{selectedSize}</span></h3>
+                <h3 className="text-lg font-semibold">Size: <span className="font-normal text-gray-400">{selectedSize}</span></h3>
                 <button 
                   className="text-blue-600 hover:text-blue-800 text-sm underline"
                   onClick={() => setShowSizeGuide(!showSizeGuide)}
@@ -215,7 +264,7 @@ export default function ProductPage() {
                     className={`py-3 px-4 border-2 rounded-lg font-medium transition-all duration-300 ${
                       selectedSize === size 
                         ? 'border-blue-500 bg-blue-500 text-white shadow-lg transform scale-105' 
-                        : 'border-gray-300 text-gray-700 hover:border-blue-400 hover:bg-blue-50'
+                        : 'border-gray-300 text-white hover:border-blue-400 hover:bg-gray-600'
                     }`}
                     onClick={() => setSelectedSize(size)}
                   >
@@ -227,24 +276,24 @@ export default function ProductPage() {
               {/* Size Guide Modal */}
               {showSizeGuide && (
                 <div className="bg-blue-50 border border-blue-200 rounded-lg p-4 mb-4">
-                  <h4 className="font-semibold mb-2">Size Chart</h4>
+                  <h4 className="font-semibold text-gray-600 mb-2">Size Chart</h4>
                   <div className="overflow-x-auto">
                     <table className="w-full text-sm">
                       <thead>
-                        <tr className="border-b">
-                          <th className="text-left py-1">Size</th>
-                          <th className="text-left py-1">Chest</th>
-                          <th className="text-left py-1">Length</th>
-                          <th className="text-left py-1">Shoulder</th>
+                        <tr className="border-b text-gray-600">
+                          <th className="text-left text-gray-600 py-1">Size</th>
+                          <th className="text-left text-gray-600 py-1">Chest</th>
+                          <th className="text-left text-gray-600 py-1">Length</th>
+                          <th className="text-left text-gray-600 py-1">Shoulder</th>
                         </tr>
                       </thead>
                       <tbody>
                         {Object.entries(product.sizeChart).map(([size, measurements]) => (
-                          <tr key={size} className="border-b">
-                            <td className="py-1 font-medium">{size}</td>
-                            <td className="py-1">{measurements.chest}</td>
-                            <td className="py-1">{measurements.length}</td>
-                            <td className="py-1">{measurements.shoulder}</td>
+                          <tr key={size} className="border-b text-black">
+                            <td className="py-1 font-medium text-black">{size}</td>
+                            <td className="py-1 text-gray-600">{measurements.chest}</td>
+                            <td className="py-1 text-gray-600">{measurements.length}</td>
+                            <td className="py-1 text-gray-600">{measurements.shoulder}</td>
                           </tr>
                         ))}
                       </tbody>
@@ -279,8 +328,37 @@ export default function ProductPage() {
 
             {/* Action Buttons */}
             <div className="space-y-4">
-              <button className="w-full bg-gradient-to-r from-blue-600 to-purple-600 text-white py-4 rounded-xl font-bold text-lg hover:from-blue-700 hover:to-purple-700 transition-all duration-300 transform hover:scale-105 shadow-lg hover:shadow-xl">
-                Add to Cart - ₹{(product.price * quantity).toLocaleString()}
+              <button
+                className={`w-full py-4 rounded-xl bg-gray-800 font-bold text-lg text-yellow-400 transition-all duration-300 transform shadow-lg ring-2 ring-white hover:ring-white-100 hover:text-black hover:bg-yellow-400 ${
+                  added
+                    ? "✔ Added" : "Add to Cart"
+                }`}
+
+                onClick={(e) => {
+                  if (!selectedSize) {
+                    toast.error("Select size first");
+                    return;
+                  }
+
+                  addToCart({
+                    id: product.id,
+                    name: product.name,
+                    price: product.price,
+                    image: product.image,
+                    size: selectedSize,
+                  }
+                  , quantity);
+
+                  flyToCart(product.image, e);
+
+                  setAdded(true);
+
+                  setTimeout(() => {
+                    setAdded(false);
+                  }, 1500);
+                }}
+              >
+                {added ? "Added ✅" : `Add to Cart - ₹${(product.price * quantity).toLocaleString()}`}
               </button>
               
               <div className="grid grid-cols-2 gap-4">
@@ -289,20 +367,29 @@ export default function ProductPage() {
                 </button>
                 <button 
                   className={`py-3 rounded-xl font-bold border-2 transition-all duration-300 ${
-                    isWishlisted 
-                      ? 'bg-red-500 text-white border-red-500' 
-                      : 'bg-white text-gray-700 border-gray-300 hover:border-red-400 hover:text-red-500'
+                    wishlisted
+                      ? "bg-red-500 text-white border-red-500"
+                      : "bg-black text-gray-400 border-gray-300 hover:border-red-400 hover:text-red-500"
                   }`}
-                  onClick={() => setIsWishlisted(!isWishlisted)}
+                  onClick={() =>
+                    wishlisted
+                      ? removeFromWishlist(product.id)
+                      : addToWishlist({
+                          id: product.id,
+                          name: product.name,
+                          price: product.price,
+                          image: product.image,
+                        })
+                  }
                 >
-                  {isWishlisted ? '♥ Wishlisted' : '♡ Add to Wishlist'}
+                  {wishlisted ? "♥ Wishlisted" : "♡ Add to Wishlist"}
                 </button>
               </div>
             </div>
 
             {/* Key Features */}
             <div className="bg-gradient-to-r from-blue-50 to-purple-50 rounded-xl p-6">
-              <h3 className="text-lg font-semibold mb-4">Key Features:</h3>
+              <h3 className="text-lg text-black font-semibold mb-4">Key Features:</h3>
               <div className="grid grid-cols-1 sm:grid-cols-2 gap-2">
                 {product.features.map((feature, index) => (
                   <div key={index} className="flex items-center gap-2">
@@ -318,8 +405,8 @@ export default function ProductPage() {
         </div>
 
         {/* Product Specifications */}
-        <div className="bg-white rounded-2xl shadow-lg p-8 mb-8">
-          <h2 className="text-3xl font-bold mb-6 text-gray-800">Product Specifications</h2>
+        <div className="bg-black rounded-2xl shadow-lg p-8 mb-8">
+          <h2 className="text-3xl font-bold mb-6 text-gray-200">Product Specifications</h2>
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
             {Object.entries(product.specifications).map(([key, value]) => (
               <div key={key} className="bg-gradient-to-r from-gray-50 to-blue-50 rounded-lg p-4">
@@ -333,8 +420,8 @@ export default function ProductPage() {
         </div>
 
         {/* Reviews Section */}
-        <div className="bg-white rounded-2xl shadow-lg p-8">
-          <h2 className="text-3xl font-bold mb-6 text-gray-800">Customer Reviews</h2>
+        <div className="bg-black rounded-2xl shadow-lg p-8">
+          <h2 className="text-3xl font-bold mb-6 text-gray-200">Customer Reviews</h2>
           <div className="grid grid-cols-1 lg:grid-cols-3 gap-8">
             <div className="lg:col-span-1">
               <div className="text-center bg-gradient-to-r from-yellow-50 to-orange-50 rounded-xl p-6">
@@ -361,7 +448,7 @@ export default function ProductPage() {
                         style={{ width: `${rating === 5 ? 70 : rating === 4 ? 20 : rating === 3 ? 7 : rating === 2 ? 2 : 1}%` }}
                       ></div>
                     </div>
-                    <span className="text-sm text-gray-600 w-12">
+                    <span className="text-sm text-gray-200 w-12">
                       {rating === 5 ? '70%' : rating === 4 ? '20%' : rating === 3 ? '7%' : rating === 2 ? '2%' : '1%'}
                     </span>
                   </div>

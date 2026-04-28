@@ -1,5 +1,6 @@
 import { products } from '@/data/products';
-import ProductCard from '@/components/ProductCard';
+import ProductCardWrapper from "@/components/ProductCardWrapper";
+
 
 export default function KidsPartyPage() {
   const party = products.filter((p) => p.category === 'kids-party');
@@ -10,7 +11,7 @@ export default function KidsPartyPage() {
       <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-5">
         <div className="ml-64"></div>  {/* helps to set a margin from the fixed sidebar */}
         {party.map((product) => (
-          <ProductCard key={product.id} product={product} />
+          <ProductCardWrapper key={product.id} product={product} />
         ))}
       </div>
     </div>

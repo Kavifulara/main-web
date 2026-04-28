@@ -1,92 +1,203 @@
-'use client';
-import { useState, useEffect, ChangeEvent, JSX } from 'react';
-import styles from './ProductSearch.module.css';
-import type { Product } from '@/data/products';   // ← import the real type
+"use client";
+import { useState } from "react";
+import { Search } from "lucide-react";
+import { Product, } from '@/data/products';
+import { useRouter } from "next/navigation";
+import { Mic } from "lucide-react";
+import useVoiceSearch from "@/hooks/useVoiceSearch";
 
-interface ProductSearchProps {
+
+type Props = {
   products: Product[];
-  onSearchResults?: (results: Product[]) => void; // optional callback
-}
+  filteredProducts: Product[];
+  setFiltered: (products: Product[]) => void;
+};
 
-const ProductSearch = ({ products, onSearchResults }: ProductSearchProps): JSX.Element => {
-  const [searchTerm, setSearchTerm]   = useState('');
-  const [filtered, setFiltered]       = useState<Product[]>(products);
+export default function ProductSearch({ products, filteredProducts, setFiltered }: Props) {
+  const [query, setQuery] = useState<string>("");
 
-  // Filter whenever the term or original list changes
-  useEffect(() => {
-    const term = searchTerm.toLowerCase();
-    const result = term
-      ? products.filter(p =>
-          p.name.toLowerCase().includes(term) ||
-          p.description?.toLowerCase().includes(term) ||
-          p.category.toLowerCase().includes(term)
-        )
-      : products;
+  const router = useRouter();
 
-    setFiltered(result);
-    onSearchResults?.(result);              // lift state up if parent cares
-  }, [searchTerm, products, onSearchResults]);
+  const handleSearch = (value: string) => {
+    setQuery(value);
+  
+    const q = value.toLowerCase().trim();
+  
+    if (!q) {
+      setFiltered(products);
+      return;
+    }
 
-  const handleChange = (e: ChangeEvent<HTMLInputElement>): void => {
-    setSearchTerm(e.target.value);
+    router.push(`/search?q=${encodeURIComponent(value)}`);
+
+  
+    // Remove useless words 
+    const stopWords = ["show", "me", "i", "want", "need", "a", "the"];
+    const words = q
+      .split(" ")
+      .filter((word) => !stopWords.includes(word));
+  
+    // Extract price 
+    const priceMatch = q.match(/under (\d+)/);
+    const maxPrice = priceMatch ? parseInt(priceMatch[1]) : null;
+  
+    // Detect color
+    const colors = ["black", "white", "red", "blue", "green"];
+    const detectedColor = colors.find((c) => q.includes(c));
+  
+    const filtered = products.filter((product) => {
+      const name = product.name.toLowerCase();
+      const category = product.category?.toLowerCase() || "";
+      const description = product.description?.toLowerCase() || "";
+  
+      // Smart word matching 
+      const wordMatch = words.every(
+        (word) =>
+          name.includes(word) ||
+          category.includes(word) ||
+          description.includes(word)
+      );
+  
+      // Color match 
+      const colorMatch = detectedColor
+        ? name.includes(detectedColor)
+        : true;
+  
+      // Price condition (
+      const priceCondition =
+        maxPrice !== null ? product.price <= maxPrice : true;
+  
+      return wordMatch && colorMatch && priceCondition;
+    });
+  
+    setFiltered(filtered);
   };
+  
 
-  const clearSearch = (): void => setSearchTerm('');
+  // 🎤 Voice hook integration
+  const { listening, startListening } = useVoiceSearch(
+    setQuery,
+    handleSearch
+  );
 
   return (
-  <div className={styles.searchContainer}>
-    <div className={styles.searchWrapper}>
-      {/* Category Dropdown */}
-      <select className={styles.categoryDropdown}>
-        <option value="all">All</option>
-        <option value="mens">Men's Fashion</option>
-        <option value="womens">Women's Fashion</option>
-        <option value="kids">Kids' Fashion</option>
-      </select>
+    <div className=" w-full flex flex-col items-center ">
+      <div className="relative group w-[90%] md:w-[500px] ">
+        <div className="absolute -inset-[1px] rounded-2xl 
+                        bg-gradient-to-r from-yellow-400/40 via-transparent to-yellow-400/40 
+                        opacity-0 group-focus-within:opacity-100 blur-md 
+                        transition-all duration-300" />
+        
+        <input
+          type="text"
+          placeholder="Search for products..."
+          value={query}
+          onChange={(e: React.ChangeEvent<HTMLInputElement>) =>
+            handleSearch(e.target.value)
+          }
+          onKeyDown={(e) => {
+            if (e.key === "Enter" && query.trim()) {
+              router.push(`/search?q=${encodeURIComponent(query)}`);
+            }
+          }}
+          className="w-full pl-12 pr-12 py-3 rounded-2xl 
+          bg-[rgba(255,255,255,0.05)] text-gray-200
+          backdrop-blur-xl border border-white/30
+          shadow-[0_0_20px_rgba(255,255,255,0.05)]
+          
+          focus:outline-none 
+          focus:border-white/100
+          focus:shadow-[0_0_25px_rgba(255,215,0,0.25)]
+          
+          placeholder:text-gray-400
+          transition-all duration-300"
+        />
+        <div className="absolute right-2 top-1/2 -translate-y-1/2">
+  
+          {/* Pulse Rings */}
+          {listening && (
+            <>
+              <span className="absolute inset-0 rounded-full bg-red-400 opacity-75 animate-ping"></span>
+              <span className="absolute inset-0 rounded-full bg-red-300 opacity-50 animate-ping delay-200"></span>
+            </>
+          )}
+        
+          {/* mic Button */}
+          <button
+            onClick={startListening}
+            className={`relative p-2 rounded-full transition-all duration-300
+            ${
+              listening
+                ? "bg-red-500 text-white scale-110 shadow-[0_0_20px_rgba(255,0,0,0.6)]"
+                : "bg-white/10 text-gray-300 hover:bg-white/20"
+            }`}
+          >
+            <Mic size={18} />
+          </button>
+        </div>
 
-      {/* Search Input */}
-      <input
-        type="text"
-        value={searchTerm}
-        onChange={handleChange}
-        className={styles.searchInput}
-        placeholder="Search for Products"
-      />
+        <Search className="absolute left-4 top-1/2 -translate-y-1/2 text-gray-400 group-focus-within:text-yellow-300 transition" size={20} />
+      
 
-      {/* Search Button */}
-      <button className={styles.searchButton} type="submit">
-        <svg className={styles.searchIcon} viewBox="0 0 24 24">
-          <path d="M15.5 14h-.79l-.28-.27C15.41 12.59 16 11.11 16 9.5 16 5.91 13.09 3 9.5 3S3 5.91 3 9.5 5.91 16 9.5 16c1.61 0 3.09-.59 4.23-1.57l.27.28v.79l5 4.99L20.49 19l-4.99-5zm-6 0C7.01 14 5 11.99 5 9.5S7.01 5 9.5 5 14 7.01 14 9.5 11.99 14 9.5 14z"/>
-        </svg>
-      </button>
-
-      {/* Clear button (if needed) */}
-      {searchTerm && (
-        <button onClick={clearSearch} className={styles.clearBtn}>×</button>
-      )}
-    </div>
-
-    {/* Suggestions Dropdown */}
-    {searchTerm && (
-      <div className={styles.suggestionsDropdown}>
-        {filtered.slice(0, 5).map(p => (
-          <div key={p.id} className={styles.suggestionItem}>
-            <svg className={styles.suggestionIcon} viewBox="0 0 24 24">
-              <path d="M15.5 14h-.79l-.28-.27C15.41 12.59 16 11.11 16 9.5 16 5.91 13.09 3 9.5 3S3 5.91 3 9.5 5.91 16 9.5 16c1.61 0 3.09-.59 4.23-1.57l.27.28v.79l5 4.99L20.49 19l-4.99-5zm-6 0C7.01 14 5 11.99 5 9.5S7.01 5 9.5 5 14 7.01 14 9.5 11.99 14 9.5 14z"/>
-            </svg>
-            <span className={styles.suggestionText}>{p.name}</span>
-            <span className={styles.price}>${p.price}</span>
-          </div>
-        ))}
-        {filtered.length === 0 && (
-          <div className={styles.suggestionItem}>
-            <span className={styles.suggestionText}>No results found</span>
+        {query && (
+          <div className="absolute left-0 right-0 mt-3 bg-[rgba(20,20,20,0.9)] backdrop-blur-xl 
+                          border border-white/10 
+                          shadow-[0_10px_40px_rgba(0,0,0,0.5)]
+                          rounded-2xl max-h-60 overflow-y-auto z-50">
+        
+            {filteredProducts.length > 0 ? (
+              filteredProducts.slice(0, 5).map((p) => (
+                <div
+                  key={p.id}
+                  className="p-3 hover:bg-white/10 cursor-pointer text-gray-200 transition"
+                  onClick={() => {
+                    setQuery(p.name);
+                    setFiltered([p]);
+        
+                    router.push(`/product/${p.id}`);
+                    setQuery("");
+                  }}
+                >
+                  {p.name}
+                </div>
+              ))
+            ) : (
+              <div className="p-4 text-center text-gray-500">
+                <p className="font-semibold text-black">No results found</p>
+                <p className="text-sm mt-1">Try searching something else</p>
+        
+                <div className="mt-3 text-sm">
+                  <p className="text-gray-400">You might like:</p>
+        
+                  <div className="flex flex-wrap gap-2 mt-2 justify-center">
+                    {["hoodie", "t shirt", "jeans", "black shirt"].map((s) => (
+                      <button
+                        key={s}
+                        onClick={() => handleSearch(s)}
+                        className="px-3 py-1 bg-gray-100 rounded-full hover:bg-gray-200 text-black"
+                      >
+                        {s}
+                      </button>
+                    ))}
+                  </div>
+                </div>
+              </div>
+            )}
           </div>
         )}
       </div>
-    )}
-  </div>
-  )
+      {/* Listening indicator (OUTSIDE) */}
+      {listening && (
+        <div className="flex gap-1 mt-3">
+          {[...Array(5)].map((_, i) => (
+            <div
+              key={i}
+              className="w-1 h-6 bg-red-500 rounded animate-bounce"
+              style={{ animationDelay: `${i * 0.1}s` }}
+            />
+          ))}
+        </div>
+      )}
+    </div>
+  );
 }
-export default ProductSearch;
-

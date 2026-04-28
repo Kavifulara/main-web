@@ -8,6 +8,8 @@ export interface Product {
   category: string;
   isNew?: boolean;
   description?: string;
+  subCategory?: string;
+  
 }
 
 export const products: Product[] = [
@@ -18,7 +20,8 @@ export const products: Product[] = [
     price: 1299,
     oldPrice: 1599,
     sizes: ['S', 'M', 'L', 'XL'],
-    category: 'mens-tshirts',
+    category: 'Men',
+    subCategory: "T-Shirts",
     isNew: true,
     description: 'Premium cotton t-shirt for men.'
   },
@@ -28,7 +31,8 @@ export const products: Product[] = [
     image: '/images/products/mens-hoodie-1.jpg',
     price: 1999,
     sizes: ['M', 'L', 'XL'],
-    category: 'mens-hoodies',
+    category: 'Men',
+    subCategory: "Hoodies",
     isNew: true,
     description: 'Warm and stylish hoodie for men.'
   },
@@ -39,7 +43,8 @@ export const products: Product[] = [
     price: 1399,
     oldPrice: 1799,
     sizes: ['S', 'M', 'L'],
-    category: 'womens-tshirts',
+    category: 'Women',
+    subCategory: "T-Shirts",
     isNew: true,
     description: 'Trendy graphic t-shirt for women.'
   },
@@ -49,7 +54,8 @@ export const products: Product[] = [
     image: '/images/products/womens-hoodie-1.jpg',
     price: 2099,
     sizes: ['S', 'M', 'L', 'XL'],
-    category: 'womens-hoodies',
+    category: 'Women',
+    subCategory: "Hoodies",
     isNew: true,
     description: 'Cozy and fashionable hoodie for women.'
   },
@@ -59,7 +65,8 @@ export const products: Product[] = [
     image: '/images/products/kids-boys-1.jpg',
     price: 899,
     sizes: ['XS', 'S', 'M'],
-    category: 'kids-boys',
+    category: 'Kids',
+    subCategory: "Boys' Clothing",
     isNew: true,
     description: 'Smart party shirt for boys.'
   },
@@ -69,7 +76,8 @@ export const products: Product[] = [
     image: '/images/products/kids-girls-1.jpg',
     price: 1199,
     sizes: ['XS', 'S', 'M', 'L'],
-    category: 'kids-girls',
+    category: 'Kids',
+    subCategory: "Girls' Clothing",
     isNew: true,
     description: 'Beautiful dress for girls.'
   },
@@ -79,7 +87,8 @@ export const products: Product[] = [
     image: '/images/products/kids-party-1.jpg',
     price: 1499,
     sizes: ['S', 'M', 'L'],
-    category: 'kids-party',
+    category: 'Kids',
+    subCategory: "Party Wear",
     isNew: true,
     description: 'Festive party wear for kids.'
   }

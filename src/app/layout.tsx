@@ -1,8 +1,9 @@
 import type { Metadata } from "next";
 import { Geist, Geist_Mono } from "next/font/google";
 import "./globals.css";
-import Navbar from "@/components/Navbar";
-// import Sidebar from "@/components/Sidebar";
+//import Sidebar from "@/components/Sidebar";
+import ClientLayout from "@/components/ClientLayout";
+
 
 const geistSans = Geist({
   variable: "--font-geist-sans",
@@ -23,17 +24,15 @@ export default function RootLayout({
   children,
 }: Readonly<{
   children: React.ReactNode;
-}>) {
+}>
+) {
+
   return (
     <html lang="en">
-      <body
-        className={`${geistSans.variable} ${geistMono.variable} antialiased`}
-      >
-        <Navbar />
-        {/* Sidebar will be opened as a drawer from Navbar, not always visible */}
-        <main className="flex-1">
+      <body className={`${geistSans.variable} ${geistMono.variable} bg-gradient-to-br from-[#0a0a0a] via-[#111111] to-[#050505] text-gray-200`}>
+        <ClientLayout>
           {children}
-        </main>
+        </ClientLayout>
       </body>
     </html>
   );

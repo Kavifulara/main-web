@@ -4,6 +4,8 @@ import { signInWithEmailAndPassword, signInWithPopup } from "firebase/auth";
 import { auth, provider } from "@/lib/firebase";
 import { useState } from 'react';
 import Link from 'next/link';
+import { useRouter } from "next/navigation";
+import toast from "react-hot-toast";
 
 export default function SignInPage() {
   const [formData, setFormData] = useState({
@@ -44,6 +46,8 @@ export default function SignInPage() {
     return Object.keys(newErrors).length === 0;
   };
 
+  const router = useRouter();
+
   const handleSubmit = async (e: React.FormEvent) => {
   e.preventDefault();
 
@@ -57,8 +61,18 @@ export default function SignInPage() {
 
       console.log("Logged in:", userCredential.user);
 
-      // redirect (optional)
-      window.location.href = "/";
+      // ✅ ADD THIS (VERY IMPORTANT)
+      localStorage.setItem("isLoggedIn", "true");
+
+      // ✅ check onboarding
+      const bodyType = localStorage.getItem("bodyType");
+
+      if (!bodyType) {
+        window.location.href = "/onboarding/body-type";
+      } else {
+        router.push("/");
+      }
+
     } catch (error) {
       setErrors({ email: "Invalid email or password" });
     }
@@ -66,8 +80,8 @@ export default function SignInPage() {
   };
 
   return (
-    <div className="min-h-screen bg-gray-50 flex flex-col justify-center py-12 sm:px-6 lg:px-8">
-      <div className="sm:mx-auto sm:w-full sm:max-w-md">
+    <div className="min-h-screen bg-gray-50 flex flex-col justify-center py-12  ">
+      <div className="mx-auto max-w-md">
         <div className="text-center">
           <h1 className="text-3xl font-bold text-gray-800 mb-2">BAKFiG</h1>
           <p className="text-sm text-gray-600 mb-8">ELEGANCE • STYLE • FASHION</p>
@@ -177,9 +191,18 @@ export default function SignInPage() {
                 try {
                   const result = await signInWithPopup(auth, provider);
                   console.log("Google user:", result.user);
-                  window.location.href = "/";
+
+                  localStorage.setItem("isLoggedIn", "true");
+                  const bodyType = localStorage.getItem("bodyType");
+
+                  if (!bodyType) {
+                    window.location.href = "/onboarding/body-type";
+                  } else {
+                    router.push("/");
+                  }
+
                 } catch (error) {
-                  alert("Google sign-in failed");
+                  toast.error("Google sign-in failed");
                   console.error(error);
                 }
               }}
