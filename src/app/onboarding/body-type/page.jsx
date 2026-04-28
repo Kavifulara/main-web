@@ -4,19 +4,19 @@ import { useState } from "react";
 
 
 const maleTypes = [
-  { name: 'Trapezoid', image: '/images/body-type/trapezoid.PNG' },
-  { name: 'Rectangle', image: '/images/body-type/rectangle.PNG' },
-  { name: 'Triangle', image: '/images/body-type/triangle.PNG' },
-  { name: 'Inverted Triangle', image: '/images/body-type/inverted-triangle.PNG' },
-  { name: 'Oval', image: '/images/body-type/oval.PNG' },
+  { name: 'Trapezoid', image: '/images/body-type/trapezoid.png' },
+  { name: 'Rectangle', image: '/images/body-type/rectangle.png' },
+  { name: 'Triangle', image: '/images/body-type/triangle.png' },
+  { name: 'Inverted Triangle', image: '/images/body-type/inverted-triangle.png' },
+  { name: 'Oval', image: '/images/body-type/oval.png' },
 ];
 
 const femaleTypes = [
-  { name: 'Round', image: '/images/body-type/round.PNG' },
-  { name: 'Pear', image: '/images/body-type/pear.PNG' },
-  { name: 'Rectangular', image: '/images/body-type/rectangle-f.PNG' },
-  { name: 'Inverted Triangle', image: '/images/body-type/inverted-triangle-f.PNG' },
-  { name: 'Hourglass', image: '/images/body-type/hourglass.PNG' },
+  { name: 'Round', image: '/images/body-type/round.png' },
+  { name: 'Pear', image: '/images/body-type/pear.png' },
+  { name: 'Rectangular', image: '/images/body-type/rectangle-f.png' },
+  { name: 'Inverted Triangle', image: '/images/body-type/inverted-triangle-f.png' },
+  { name: 'Hourglass', image: '/images/body-type/hourglass.png' },
 ];
 
 export default function BodyTypePage() {
