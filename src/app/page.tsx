@@ -17,19 +17,19 @@ export default function Home() {
   // Hero carousel images
   const heroSlides = [
     {
-      image: '/images/womens-fashion.PNG',
+      image: '/images/womens-fashion.png',
       title: 'Women\'s Collection',
       subtitle: 'Elegant & Sophisticated',
       description: 'Discover our premium women\'s fashion collection'
     },
     {
-      image: '/images/mens-fashion.PNG',
+      image: '/images/mens-fashion.png',
       title: 'Men\'s Collection',
       subtitle: 'Bold & Stylish',
       description: 'Explore our contemporary men\'s fashion line'
     },
     {
-      image: '/images/kids-fashion.PNG',
+      image: '/images/kids-fashion.png',
       title: 'Kids Collection',
       subtitle: 'Fun & Comfortable',
       description: 'Adorable styles for your little ones'
@@ -54,7 +54,7 @@ export default function Home() {
       name: "Abhishek Singh Gaira",
       rating: 5,
       comment: "Kya kapde hai bhai holi mai bhi kharab nhi hote.",
-      image: "/images/avatar1.PNG"
+      image: "/images/avatar1.png"
     },
     {
       name: "Jaskirat singh rangi",
@@ -247,9 +247,9 @@ export default function Home() {
             </div>
             <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
               {[
-                { name: 'Men\'s Fashion', image: '/images/mens-fashion.PNG', link: '/mens' },
-                { name: 'Women\'s Fashion', image: '/images/womens-fashion.PNG', link: '/womens' },
-                { name: 'Kids Fashion', image: '/images/kids-fashion.PNG', link: '/kids' }
+                { name: 'Men\'s Fashion', image: '/images/mens-fashion.png', link: '/mens' },
+                { name: 'Women\'s Fashion', image: '/images/womens-fashion.png', link: '/womens' },
+                { name: 'Kids Fashion', image: '/images/kids-fashion.png', link: '/kids' }
               ].map((category, index) => (
                 <Link key={category.name} href={category.link}>
                   <div className="group relative overflow-hidden rounded-2xl shadow-lg hover:shadow-2xl transition-all duration-500 transform hover:scale-105 cursor-pointer">
