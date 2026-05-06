@@ -32,10 +32,10 @@ export default function ProductSearch({ products, filteredProducts, setFiltered 
 
   
     // Remove useless words 
-    const stopWords = ["show", "me", "i", "want", "need", "a", "the"];
+    const stopWords = ["show", "me", "i", "want", "need", "a", "the", "under"];
     const words = q
       .split(" ")
-      .filter((word) => !stopWords.includes(word));
+      .filter((word) => !stopWords.includes(word) && isNaN(Number(word)));
   
     // Extract price 
     const priceMatch = q.match(/under (\d+)/);
@@ -51,12 +51,14 @@ export default function ProductSearch({ products, filteredProducts, setFiltered 
       const description = product.description?.toLowerCase() || "";
   
       // Smart word matching 
-      const wordMatch = words.every(
-        (word) =>
-          name.includes(word) ||
-          category.includes(word) ||
-          description.includes(word)
-      );
+      const wordMatch =
+        words.length === 0 ||
+        words.some(
+          (word) =>
+            name.includes(word) ||
+            category.includes(word) ||
+            description.includes(word)
+        );
   
       // Color match 
       const colorMatch = detectedColor
@@ -125,14 +127,29 @@ export default function ProductSearch({ products, filteredProducts, setFiltered 
           {/* mic Button */}
           <button
             onClick={startListening}
-            className={`relative p-2 rounded-full transition-all duration-300
+            className={`relative flex items-center justify-center w-9 h-9 rounded-full transition-all duration-300 overflow-hidden
             ${
               listening
-                ? "bg-red-500 text-white scale-110 shadow-[0_0_20px_rgba(255,0,0,0.6)]"
+                ? "bg-gradient-to-br from-red-500 to-pink-500 shadow-[0_0_25px_rgba(255,0,100,0.6)]"
                 : "bg-white/10 text-gray-300 hover:bg-white/20"
             }`}
           >
-            <Mic size={18} />
+            {!listening ? (
+              <Mic size={18} />
+            ) : (
+              <div className="flex items-end gap-[2px] h-4">
+                {[...Array(4)].map((_, i) => (
+                  <span
+                    key={i}
+                    className="w-[2px] bg-white rounded-full animate-[wave_1s_ease-in-out_infinite]"
+                    style={{
+                      height: `${8 + i * 3}px`,
+                      animationDelay: `${i * 0.15}s`,
+                    }}
+                  />
+                ))}
+              </div>
+            )}
           </button>
         </div>
 
@@ -186,18 +203,6 @@ export default function ProductSearch({ products, filteredProducts, setFiltered 
           </div>
         )}
       </div>
-      {/* Listening indicator (OUTSIDE) */}
-      {listening && (
-        <div className="flex gap-1 mt-3">
-          {[...Array(5)].map((_, i) => (
-            <div
-              key={i}
-              className="w-1 h-6 bg-red-500 rounded animate-bounce"
-              style={{ animationDelay: `${i * 0.1}s` }}
-            />
-          ))}
-        </div>
-      )}
     </div>
   );
 }

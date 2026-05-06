@@ -26,10 +26,6 @@ export default function ProductCard({ product, onAddToCart }: ProductCardProps) 
   const [isHovered, setIsHovered] = useState(false);
 
   const [added, setAdded] = useState(false);
-  
-  
-  
-
 
   const flyToCart = (imgSrc: string, event: React.MouseEvent<HTMLElement>) => {
     const cart = document.getElementById("cart-icon");
