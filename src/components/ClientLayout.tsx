@@ -16,7 +16,8 @@ export default function ClientLayout({ children }: { children: React.ReactNode }
   pathname.startsWith("/onboarding") ||
   pathname.startsWith("/signin") ||
   pathname.startsWith("/signup") ||
-  pathname.startsWith("/about") ;
+  pathname.startsWith("/about") ||
+  pathname.startsWith("/contact") ;
 
   const hideSidebar =
   pathname.startsWith("/profile") ||

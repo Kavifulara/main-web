@@ -1,5 +1,7 @@
 "use client";
 
+import Link from "next/link";
+
 export default function ContactButton() {
   return (
     <button
@@ -30,7 +32,13 @@ export default function ContactButton() {
           "0px 4px 4px rgba(181, 1, 167, 0.25), inset 4px 4px 12px #7721B1",
       }}
     >
-      Contact Us
+      
+      <Link
+        href="/contact"
+      >
+        Contact Us
+      </Link>
     </button>
+    
   );
 }

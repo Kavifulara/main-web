@@ -359,7 +359,11 @@ export default function Home() {
             </div>
           </div>
         </section>
-        <AboutUsCTA />
+        <div className="text-center mb-16">
+          <p className="text-xl mb-4 text-blue-100">Want to find out how we are different from others ?</p>
+          <p className="text-xl mb-4 text-blue-100">Click the button below to know more about us .</p>
+          <AboutUsCTA />
+        </div>
       </div>
     </div>
   );
