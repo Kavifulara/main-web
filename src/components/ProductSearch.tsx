@@ -5,6 +5,7 @@ import { Product, } from '@/data/products';
 import { useRouter } from "next/navigation";
 import { Mic } from "lucide-react";
 import useVoiceSearch from "@/hooks/useVoiceSearch";
+import { useLanguage } from "@/context/LanguageContext";
 
 
 type Props = {
@@ -17,6 +18,7 @@ export default function ProductSearch({ products, filteredProducts, setFiltered 
   const [query, setQuery] = useState<string>("");
 
   const router = useRouter();
+  const {t} = useLanguage();
 
   const handleSearch = (value: string) => {
     setQuery(value);
@@ -92,7 +94,7 @@ export default function ProductSearch({ products, filteredProducts, setFiltered 
         
         <input
           type="text"
-          placeholder="Search for products..."
+          placeholder={t.search.placeholder}
           value={query}
           onChange={(e: React.ChangeEvent<HTMLInputElement>) =>
             handleSearch(e.target.value)

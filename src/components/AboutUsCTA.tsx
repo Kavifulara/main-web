@@ -1,9 +1,12 @@
 "use client";
 
+import { useLanguage } from "@/context/LanguageContext";
 import { ArrowUpRight } from "lucide-react";
 import Link from "next/link";
 
 export default function AboutUsCTA() {
+  const { t } = useLanguage();
+
   return (
     <div className="flex justify-center py-20">
 
@@ -12,7 +15,7 @@ export default function AboutUsCTA() {
         <button className="group relative flex items-center gap-3 px-10 py-4 rounded-full border-2 border-[#D7E2EA] text-[#D7E2EA] uppercase tracking-widest overflow-hidden transition-all duration-300 hover:scale-[1.03]">
 
           <span className="relative z-10">
-            About Us
+            {t.aboutus.about}
           </span>
 
           <ArrowUpRight className="relative z-10 transition-transform duration-300 group-hover:translate-x-1 group-hover:-translate-y-1" />

@@ -176,7 +176,11 @@ body {
   }
 }
 
-
+html[lang="hi"] {
+  font-family:
+    'Noto Sans Devanagari',
+    sans-serif;
+}
 
 .hero-heading {
   background: linear-gradient(180deg, #646973 0%, #BBCCD7 100%);

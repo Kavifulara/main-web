@@ -5,6 +5,7 @@ import { Product, products } from '@/data/products';
 import Link from 'next/link';
 import ProductCardWrapper from "@/components/ProductCardWrapper";
 import AboutUsCTA from "@/components/AboutUsCTA";
+import { useLanguage } from "@/context/LanguageContext";
 
 
 export default function Home() {
@@ -13,7 +14,7 @@ export default function Home() {
   const [currentSlide, setCurrentSlide] = useState(0);
   const [isVisible, setIsVisible] = useState(false);
 
-  
+  const {t} = useLanguage();
 
   // Hero carousel images
   const heroSlides = [
@@ -360,8 +361,8 @@ export default function Home() {
           </div>
         </section>
         <div className="text-center mb-16">
-          <p className="text-xl mb-4 text-blue-100">Want to find out how we are different from others ?</p>
-          <p className="text-xl mb-4 text-blue-100">Click the button below to know more about us .</p>
+          <p className={`text-xl mb-4 text-blue-100 `}>{t.page.title1}</p>
+          <p className={`text-xl mb-4 text-blue-100 `}>{t.page.title2}</p>
           <AboutUsCTA />
         </div>
       </div>

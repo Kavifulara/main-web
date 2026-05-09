@@ -16,7 +16,7 @@ export default function SkinTonePage() {
 
   const handleContinue = () => {
     localStorage.setItem("skinTone", selected);
-    router.push("/"); // next page later
+    router.push("/language"); 
   };
 
   return (

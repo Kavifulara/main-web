@@ -15,6 +15,8 @@ import ProductSearch from '@/components/ProductSearch';
 import { useWishlist } from "@/context/WishlistContext";
 import { Heart } from "lucide-react";
 import { useRef } from "react";
+import LanguageSwitcher from "@/components/LanguageSwitcher";
+import { useLanguage } from "@/context/LanguageContext";
 
 type Props = {
   products: Product[];
@@ -30,6 +32,7 @@ export default function Navbar({ showSidebar }: { showSidebar: boolean }) {
     }
 
   const router = useRouter();
+  
 
   const { cartItems } = useCart();
   const totalItems = cartItems.reduce(
@@ -68,7 +71,7 @@ export default function Navbar({ showSidebar }: { showSidebar: boolean }) {
         dropdownRef.current &&
         !dropdownRef.current.contains(event.target as Node)
       ) {
-        setOpen(false); // 👈 close dropdown
+        setOpen(false); 
       }
     };
   
@@ -142,7 +145,10 @@ export default function Navbar({ showSidebar }: { showSidebar: boolean }) {
                 />
               </div>
 
-            <div className="flex items-center space-x-6 ml-auto">
+            <div className="flex items-center space-x-4 ml-auto">
+
+              <LanguageSwitcher />
+              
 
               {/* Wishlist Icon */}
               <Link href="/wishlist" className="relative">

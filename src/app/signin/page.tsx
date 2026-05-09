@@ -61,10 +61,8 @@ export default function SignInPage() {
 
       console.log("Logged in:", userCredential.user);
 
-      // ✅ ADD THIS (VERY IMPORTANT)
       localStorage.setItem("isLoggedIn", "true");
 
-      // ✅ check onboarding
       const bodyType = localStorage.getItem("bodyType");
 
       if (!bodyType) {
